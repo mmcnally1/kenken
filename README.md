@@ -1,7 +1,7 @@
 # KenKen Solver
 ## Background
 Kenken is an arithmetic and logic puzzle, somewhat similar to Sudoku. It was created by Tetsuya Miyamoto, a Japanese math teacher, in 2004. A puzzle consists of an n /times n grid, typically ranging from 3 /times 3 to 9 /times 9. Just as in Sudoku, no number can be repeated in a row or column. Unlike the 3 /times 3 boxes in Sudoku, boxes in KenKen are of variable size and contain a target number as well as a mathematical operator. Applying the operator to the numbers in the box must yield the target.
-<Insert Example>
+/<Insert Example/>
 
 ### AC-3 Algorithm
 The AC-3 algorithm is a constraint satisfaction algorithm developed by Alan Mackworth in 1977. It treats the current state as a directed graph, where nodes are the variables and edges (arcs) are the constraints between them. The algorithm systematically removes values from the domain of a variable if it is inconsistent with any of the node's constraints. The remaining values in a node's domain after running AC-3 are the possible values in a satisfying assignment. AC-3 is often used with backtrack search to solve puzzles such as Sudoku.
@@ -13,7 +13,7 @@ Backtrack search is a form of depth-first traversal, which attempts to assign va
 We will use AC-3 and backtrack search to solve KenKen puzzles. Representing the constraints of a KenKen puzzle is much more complex than representing those of a Sudoku since the constraints on the boxes are highly variable and depend on the values of differnt mathematical operations. We will essentially run two forms of the AC-3 algorithm to reduce the initial domains of our nodes and then check for both row/column consistency and box consistency while running backtrack search.
 
   ### Setting up the Domains and Constraints
-Each box can have one of 4 operations: add, subtract, multiply, or divide. In some cases a box consists of a single square and the value is given. We take each box as input from the user in the format \<operator\> <number of squares in the box> <coordinate of box 1> ... <coordinate of box n>. The following code initializes each node's domain to (1..n) unless the value is given (in which case we can already assign the value) and creates edges between nodes that share a row/column and nodes that belong to the same box:
+Each box can have one of 4 operations: add, subtract, multiply, or divide. In some cases a box consists of a single square and the value is given. We take each box as input from the user in the format \<operator\> /<number of squares in the box/> /<coordinate of box 1/> ... /<coordinate of box n/>. The following code initializes each node's domain to (1..n) unless the value is given (in which case we can already assign the value) and creates edges between nodes that share a row/column and nodes that belong to the same box:
 ```
 def read_input():
   constraints = []
