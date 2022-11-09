@@ -278,3 +278,29 @@ def isArcConsistent(self, assignment, Xi, Xj):
     else:
         return False
 ```
+### Putting It All Together
+Now we are ready to run backtrack search! A final optimization is to choose the node with the smallest domain at each step of the search. This will cause failures to occur quicker, and we will be able to prune more paths from the search tree. This can be very important, because in a 9 /times 9 grid there could be 9^81 possible assignments, which would take literally forever to try!
+```
+def backtrackSearch(self):
+    if self.backtrack() != "failure":
+        self.display()
+    else:
+        print("Could not solve")
+
+"""
+Backtrack search - attempts to complete assignment,
+backtracks if dead end reached
+"""
+def backtrack(self):
+    if self.isAssignmentComplete():
+        return self.assignment
+    var = self.selectUnassignedVariable()
+    for value in self.orderDomainValues(var):
+        if self.isAssignmentConsistent(var, value):
+            self.assignment[var[0]][var[1]] = value
+            result = self.backtrack()
+            if result != "failure":
+                return result
+            self.assignment[var[0]][var[1]] = 0
+    return "failure"
+```
