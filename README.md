@@ -64,3 +64,117 @@ def addConstraints(self, constraints):
 ```
 
 ### Dual AC-3
+Normally the AC-3 algorithm maintains a queue of arcs and removes values from the domain of the nodes associated with the arcs when they are in conflict. If the domain of a node is altered, each arc it belongs to is added to the queue and evaluated again. Since we have two types of constraints, we alternate between evaluating row/column arcs and box arcs. The following code demonstrates this.
+```
+"""
+remove illegal values from each square's domain based on row/column constraints
+"""
+def AC3(self):
+    revised = False
+    q = deque()
+    for arc in self.arcs:
+        for var in self.arcs[arc]:
+            q.append((arc, var))
+    while q:
+        (Xi, Xj) = q.popleft()
+        if self.revise(Xi, Xj):
+            assert len(self.domains[Xi]) > 0
+            for Xk in self.arcs[Xi]:
+                if Xk != Xj:
+                    q.append((Xk, Xi)) 
+            revised = True
+    return revised
+        
+def revise(self, Xi, Xj):
+    revised = False
+    for x in self.domains[Xi]:
+        needToRevise = True
+        for y in self.domains[Xj]:
+            if y != x:
+                needToRevise = False
+        if needToRevise:
+            self.domains[Xi].remove(x)
+            revised = True
+    return revised
+
+"""
+remove illegal values from each square's domain based on arithmetic box constraints
+"""
+def AC3Constraints(self):
+    revised = False
+    q = deque()
+    for var in self.constraints:
+        q.append((var, list(self.constraints[var][2:])))
+    while q:
+        (Xi, Xj) = q.popleft()
+        if self.reviseConstraints(Xi, Xj):
+            assert len(self.domains[Xi]) > 0
+            for Xk in Xj:
+                q.append((Xk, list(self.constraints[Xk][2:])))
+            revised = True
+    return revised
+
+def reviseConstraints(self, Xi, Xj):
+    revised = False
+    operation = self.constraints[Xi][0]
+    target = self.constraints[Xi][1]
+    if len(Xj) == 1:
+        for x in self.domains[Xi]:
+            needToRevise = True
+            for Xk in Xj:
+                for y in self.domains[Xk]:
+                    if operation == '+':
+                        if x + y == target:
+                            needToRevise = False
+                    if operation == '*':
+                        if x * y == target:
+                            needToRevise = False
+                    if operation == '-':
+                        if x - y == target or y - x == target:
+                            needToRevise = False
+                    if operation == '/':
+                        if x / y == target or y / x == target:
+                            needToRevise = False
+            if needToRevise:
+                self.domains[Xi].remove(x)
+                revised = True
+    else:
+        domains = []
+        for Xk in Xj:
+            domains.append(self.domains[Xk])
+        fullDomain = list(itertools.product(*domains))
+        possibleValues = []
+        for x in self.domains[Xi]:
+            needToRevise = True
+            if operation == '+':
+                for i in range(len(fullDomain)):
+                    possibleValues.append(self.addValue(fullDomain[i]))
+                for y in possibleValues:
+                    if x + y == target:
+                        needToRevise = False
+            elif operation == '*':
+                for i in range(len(fullDomain)):
+                    possibleValues.append(self.multiplyValue(fullDomain[i]))
+                for y in possibleValues:
+                    if x * y == target:
+                        needToRevise = False
+            if needToRevise:
+                self.domains[Xi].remove(x)
+                revised = True
+    return revised
+
+"""
+Runs both AC3 algorithms until no further changes are made
+"""
+def AC3Prep(self):
+    reg_revised = True
+    constraint_revised = True
+    while not self.isAssignmentComplete() and (reg_revised or constraint_revised) :
+        for var in self.domains:
+            if len(self.domains[var]) == 1:
+                self.assignment[var[0]][var[1]] = self.domains[var][0]
+            if len(self.domains[var]) == 0:
+                return "Unsolvable"
+        reg_revised = self.AC3()
+        constraint_revised = self.AC3Constraints()
+```
