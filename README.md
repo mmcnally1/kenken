@@ -13,7 +13,7 @@ Backtrack search is a form of depth-first traversal, which attempts to assign va
 We will use AC-3 and backtrack search to solve KenKen puzzles. Representing the constraints of a KenKen puzzle is much more complex than representing those of a Sudoku since the constraints on the boxes are highly variable and depend on the values of differnt mathematical operations. We will essentially run two forms of the AC-3 algorithm to reduce the initial domains of our nodes and then check for both row/column consistency and box consistency while running backtrack search.
 
   ### Setting up the Domains and Constraints
-Each box can have one of 4 operations: add, subtract, multiply, or divide. In some cases a box consists of a single square and the value is given. We take each box as input from the user in the format \<operator> <number of squares in the box> <coordinate of box 1> ... <coordinate of box n>. The following code initializes each node's domain to (1..n) unless the value is given (in which case we can already assign the value) and creates edges between nodes that share a row/column and nodes that belong to the same box:
+Each box can have one of 4 operations: add, subtract, multiply, or divide. In some cases a box consists of a single square and the value is given. We take each box as input from the user in the format \<operator> \<number of squares in the box> <coordinate of box 1> ... <coordinate of box n>. The following code initializes each node's domain to (1..n) unless the value is given (in which case we can already assign the value) and creates edges between nodes that share a row/column and nodes that belong to the same box:
 ```
 def read_input():
   constraints = []
