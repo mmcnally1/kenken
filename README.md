@@ -178,3 +178,103 @@ def AC3Prep(self):
         reg_revised = self.AC3()
         constraint_revised = self.AC3Constraints()
 ```
+### Checking Node Consistency
+When we run backtrack search, after we assign each node a value we need to check if the assignment is still consistent. If it is, we continue down the current path, and if it isn't we abandon the path and backtrack to the last consistent state. Before assigning a value to a node, we need to check the following:
+Node Consistency - the node is being assigned a valid value from its domain
+Row/Column Arc Consistency - the value being assigned isn't already taken by another node on the same row or column
+Arithmetic Box Arc Consistency - It is still possible to achieve the target value given the operation and the assigned or possible values of other nodes in the box
+
+```
+def isAssignmentConsistent(self, Xi, x):
+    assignment = copy.deepcopy(self.assignment)
+    assignment[Xi[0]][Xi[1]] = x
+    isConsistent = True
+    if not self.isNodeConsistent(assignment, Xi):
+        isConsistent = False
+    for Xj in self.arcs[Xi]:
+        if not self.isArcConsistent(assignment, Xi, Xj):
+            isConsistent = False
+    if not self.isNodeConstraintConsistent(assignment, Xi):
+        isConsistent = False
+    return isConsistent          
+
+"""
+Checks if square's assignment is consistent with arithmetic box
+    - if neighbor(s) are already assigned, 
+    value must be consistent with target value
+    - if neighbor(s) have not been assigned,
+    value must allow for possible achievement of target value
+"""
+def isNodeConstraintConsistent(self, assignment, Xi):
+    isConsistent = False
+    operation = self.constraints[Xi][0]
+    target = self.constraints[Xi][1]
+    Xj = list(self.constraints[Xi][2:])
+    if len(Xj) == 1:
+        if assignment[Xj[0][0]][Xj[0][1]] == 0:
+            for y in self.domains[Xj[0]]:
+                if operation == '+':
+                    if assignment[Xi[0]][Xi[1]] + y == target:
+                        isConsistent = True
+                elif operation == '*':
+                    if assignment[Xi[0]][Xi[1]] * y == target:
+                        isConsistent = True
+                elif operation == '-':
+                    if (assignment[Xi[0]][Xi[1]] - y == target or
+                        y - assignment[Xi[0]][Xi[1]] == target):
+                        isConsistent = True
+                elif operation == '/':
+                    if (assignment[Xi[0]][Xi[1]] / y == target or
+                        y / assignment[Xi[0]][Xi[1]] == target):
+                        isConsistent = True
+        else:
+            if operation == '+':
+                if assignment[Xi[0]][Xi[1]] + assignment[Xj[0][0]][Xj[0][1]] == target:
+                    isConsistent = True
+            elif operation == '*':
+                if assignment[Xi[0]][Xi[1]] * assignment[Xj[0][0]][Xj[0][1]] == target:
+                    isConsistent = True
+            elif operation == '-':
+                if (assignment[Xi[0]][Xi[1]] - assignment[Xj[0][0]][Xj[0][1]] == target or
+                    assignment[Xj[0][0]][Xj[0][1]] - assignment[Xi[0]][Xi[1]] == target):
+                    isConsistent = True
+            elif operation == '/':
+                if (assignment[Xi[0]][Xi[1]] / assignment[Xj[0][0]][Xj[0][1]] == target or
+                    assignment[Xj[0][0]][Xj[0][1]] / assignment[Xi[0]][Xi[1]] == target):
+                    isConsistent = True                    
+    else:
+        domains = []
+        for Xk in Xj:
+            if assignment[Xk[0]][Xk[1]] == 0:
+                domains.append(self.domains[Xk])
+            else:
+                domains.append([assignment[Xk[0]][Xk[1]]])
+        fullDomain = list(itertools.product(*domains))
+        possibleValues = []
+        if operation == '+':
+            for i in range(len(fullDomain)):
+                possibleValues.append(self.addValue(fullDomain[i]))
+            for y in possibleValues:
+                if assignment[Xi[0]][Xi[1]] + y == target:
+                    isConsistent = True
+        elif operation == '*':
+            for i in range(len(fullDomain)):
+                possibleValues.append(self.multiplyValue(fullDomain[i]))
+            for y in possibleValues:
+                if assignment[Xi[0]][Xi[1]] * y == target:
+                    isConsistent = True
+    return isConsistent
+
+def isNodeConsistent(self, assignment, Xi):
+    if (assignment[Xi[0]][Xi[1]] >= 0 and 
+        assignment[Xi[0]][Xi[1]] <= self.size):
+        return True
+    else:
+        return False
+
+def isArcConsistent(self, assignment, Xi, Xj):
+    if assignment[Xi[0]][Xi[1]] != self.assignment[Xj[0]][Xj[1]]:
+        return True
+    else:
+        return False
+```
