@@ -1,7 +1,7 @@
 # KenKen Solver
 My dad introduced me to KenKens a while back, and while they can make for a fun challenge, they can also be quite difficult to solve. He occasionally sends me puzzles that he is stuck on and in the spirit of a true programmer, instead of taking a few minutes to try to solve them myself I decided to spend much longer writing a program to do it for me!
 ## Background
-Kenken is an arithmetic and logic puzzle, somewhat similar to Sudoku. It was created by Tetsuya Miyamoto, a Japanese math teacher, in 2004. A puzzle consists of an n /times n grid, typically ranging from 3 $/times$ 3 to 9 /times 9. Just as in Sudoku, no number can be repeated in a row or column. Unlike the 3 /times 3 boxes in Sudoku, boxes in KenKen are of variable size and contain a target number as well as a mathematical operator. Applying the operator to the numbers in the box must yield the target.
+Kenken is an arithmetic and logic puzzle, somewhat similar to Sudoku. It was created by Tetsuya Miyamoto, a Japanese math teacher, in 2004. A puzzle consists of an n /times n grid, typically ranging from 3 $\times$ 3 to 9 /times 9. Just as in Sudoku, no number can be repeated in a row or column. Unlike the 3 /times 3 boxes in Sudoku, boxes in KenKen are of variable size and contain a target number as well as a mathematical operator. Applying the operator to the numbers in the box must yield the target.
 /<Insert Example/>
 
 ### AC-3 Algorithm
