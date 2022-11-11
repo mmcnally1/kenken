@@ -181,7 +181,7 @@ def AC3Prep(self):
 ```
 ### Checking Node Consistency
 When we run backtrack search, after we assign each node a value we need to check if the assignment is still consistent. If it is, we continue down the current path, and if it isn't we abandon the path and backtrack to the last consistent state. Before assigning a value to a node, we need to check the following:  
-**Node Consistency** - the node is being assigned a valid value from its domain  
+&nbsp;&nbsp;**Node Consistency** - the node is being assigned a valid value from its domain  
 **Row/Column Arc Consistency** - the value being assigned isn't already taken by another node on the same row or column  
 **Arithmetic Box Arc Consistency** - It is still possible to achieve the target value given the operation and the assigned or possible values of other nodes in the box
 
