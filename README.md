@@ -2,7 +2,7 @@
 My dad introduced me to KenKens a while back, and although they can make for a fun challenge, they can also be quite difficult to solve. He occasionally sends me puzzles that he is stuck on and in the spirit of a true programmer, instead of taking a few minutes to try to solve them myself I decided to spend much longer writing a program to do it for me!
 ## Background
 Kenken is an arithmetic and logic puzzle, somewhat similar to Sudoku. It was created by Tetsuya Miyamoto, a Japanese math teacher, in 2004. A puzzle consists of an n $\times$ n grid, typically ranging from 3 $\times$ 3 to 9 $\times$ 9. Just as in Sudoku, no number can be repeated in a row or column. Unlike the 3 $\times$ 3 boxes in Sudoku, boxes in KenKen are of variable size and contain a target number as well as a mathematical operator. Applying the operator to the numbers in the box must yield the target. Shown here is a 7 $\times$ 7 puzzle:  
-![alt text](kenken.png)
+![alt text](./kenken.png)
 
 ### AC-3 Algorithm
 The AC-3 algorithm is a constraint satisfaction algorithm developed by Alan Mackworth in 1977. It treats the current state as a directed graph, where nodes are the variables and edges (arcs) are the constraints between them. The algorithm systematically removes values from the domain of a variable if it is inconsistent with any of the node's constraints. The remaining values in a node's domain after running AC-3 are the possible values in a satisfying assignment. AC-3 is often used with backtrack search to solve puzzles such as Sudoku.
